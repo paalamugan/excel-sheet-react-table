@@ -1,0 +1,1 @@
+export { tableReducer } from './tableReducer';
