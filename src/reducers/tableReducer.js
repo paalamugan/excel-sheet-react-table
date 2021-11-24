@@ -13,16 +13,25 @@ import {
   shortId,
 } from '../helper/utils';
 import { ActionTypes, DataTypes } from '../contants';
-import { CURRENCY, FILTER_BY_COLUMN } from '../config';
+import { CURRENCY, FILTER_BY_COLUMN, FILTER_BY_COLUMN_OPTIONS } from '../config';
 
 const getColumnIndex = (columns, columnId) => {
   return columns.findIndex((column) => column.id === columnId);
 };
 
+export const filterOptions = (() => {
+  return FILTER_BY_COLUMN_OPTIONS.map((option, index) => ({
+    id: index + 1,
+    name: option,
+  }));
+})();
+
 export const defaultTableState = () => ({
   columns: [],
   data: [],
   cloneData: [],
+  selectedFilterValue: [],
+  filterOptions: filterOptions,
   skipReset: false,
 });
 

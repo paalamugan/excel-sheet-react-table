@@ -1,22 +1,21 @@
+import './styles/app.css';
+
 import React, { useState, useEffect, useReducer, useCallback, useRef } from 'react';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import xlsxParser from 'xlsx-parse-json';
-import { ToastContainer, toast } from 'react-toastify';
-import './styles/app.css';
 import Table from './components/Table';
 import DragDrop from './components/DragDrop';
+import { Multiselect } from 'multiselect-react-dropdown';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { ToastContainer, toast } from 'react-toastify';
 import { makeRecords } from './helper/utils';
 import { tableReducer } from './reducers/index';
-import { APP_NAME, FILTER_OPTIONS } from './config';
+import { APP_NAME } from './config';
 import { ActionTypes, RecordType } from './contants';
-import Multiselect from 'multiselect-react-dropdown';
 import { defaultTableState } from './reducers/tableReducer';
-
-const options = FILTER_OPTIONS.map((option, index) => ({ id: index, name: option }));
 
 const App = () => {
   const [state, dispatch] = useReducer(tableReducer, defaultTableState());
@@ -136,7 +135,8 @@ const App = () => {
                     {showFilterInput && (
                       <div className="mr-4 d-flex">
                         <Multiselect
-                          options={options}
+                          options={state.filterOptions}
+                          selectedValues={state.selectedFilterValue}
                           avoidHighlightFirstOption={true}
                           placeholder={`Filters`}
                           onSelect={onChangeFilterOption}

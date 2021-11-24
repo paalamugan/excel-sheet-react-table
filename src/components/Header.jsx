@@ -294,7 +294,7 @@ export default function Header({
               ref={setReferenceElement}
             >
               <div className="svg-icon svg-gray icon-margin">{propertyIcon}</div>
-              <div className="text-ellipsis" title={label}>
+              <div className="text-ellipsis" title={calc ? `Formula: ${calc}` : ''}>
                 {label}
               </div>
             </div>

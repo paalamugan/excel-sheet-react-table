@@ -7,7 +7,7 @@ import {
   INDEX_TEXT_WIDTH,
   DEFAULT_HEADER_COLUMNS,
   SUM_TEXT,
-  FILTER_OPTIONS,
+  FILTER_BY_COLUMN_OPTIONS,
 } from '../config';
 import { DataTypes, RecordType } from '../contants';
 import { defaultTableState } from '../reducers/tableReducer';
@@ -277,7 +277,7 @@ export const createDefaultRow = (cols = []) => {
       column.dataType === DataTypes.CALC
         ? '0'
         : column.dataType === DataTypes.SELECT || column.type === DataTypes.SELECT
-        ? FILTER_OPTIONS[0]
+        ? FILTER_BY_COLUMN_OPTIONS[0]
         : '';
     return result;
   }, {});
