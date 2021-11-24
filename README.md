@@ -2,7 +2,7 @@
 
 - Its helps people to edit and delete their excel sheet in browser itself. This application made with using react framework.
 
-- [Demo Version](https://paalamugan.github.io/excel-sheet-react-table/)
+- [Demo version](https://paalamugan.github.io/excel-sheet-react-table/)
 
 ## Features
 
