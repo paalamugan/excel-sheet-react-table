@@ -42,10 +42,12 @@ export default function Cell({
         dataDispatch({
           type: ActionTypes.ADD_OPTION_TO_COLUMN,
           option: e.target.value,
-          backgroundColor: randomColor(),
+          // backgroundColor: randomColor(),
           columnId: id,
         });
       }
+      setShowAdd(false);
+    } else if (e.key === 'Escape') {
       setShowAdd(false);
     }
   }
@@ -59,7 +61,7 @@ export default function Cell({
       dataDispatch({
         type: ActionTypes.ADD_OPTION_TO_COLUMN,
         option: e.target.value,
-        backgroundColor: randomColor(),
+        // backgroundColor: randomColor(),
         columnId: id,
       });
     }
@@ -215,23 +217,26 @@ export default function Cell({
                     overflow: 'auto',
                   }}
                 >
-                  <div className="d-flex flex-wrap-wrap" style={{ marginTop: '-0.5rem' }}>
-                    {options.length ? (
-                      options.map((option, index) => (
-                        <div
-                          key={index}
-                          className="mt-2 mr-2 cursor-pointer"
-                          onClick={() => handleOptionClick(option)}
-                        >
-                          <Badge
-                            value={option.label}
-                            backgroundColor={option.backgroundColor || getColor()}
-                          />
-                        </div>
-                      ))
-                    ) : (
-                      <div className="mt-2 text-muted fa-sm">No options available!</div>
-                    )}
+                  <div
+                    className="d-flex flex-wrap-wrap align-items-center"
+                    style={{ marginTop: '-0.5rem' }}
+                  >
+                    {options.length
+                      ? options.map((option, index) => (
+                          <div
+                            key={index}
+                            className="mt-2 mr-2 cursor-pointer"
+                            onClick={() => handleOptionClick(option)}
+                          >
+                            <Badge
+                              value={option.label}
+                              backgroundColor={option.backgroundColor || getColor()}
+                            />
+                          </div>
+                        ))
+                      : !showAdd && (
+                          <div className="mt-2 text-muted fa-sm me-2">No options available!</div>
+                        )}
                     {showAdd && (
                       <div
                         className="mt-2 mr-2 bg-grey-200 border-radius-sm"
@@ -249,16 +254,19 @@ export default function Cell({
                         />
                       </div>
                     )}
-                    {/* <div className="mt-2 mr-2 cursor-pointer" onClick={handleAddOption}>
+                    <div className="mt-1 mr-2 cursor-pointer" onClick={handleAddOption}>
                       <Badge
                         value={
-                          <span className="svg-icon-sm svg-text">
-                            <PlusIcon />
-                          </span>
+                          <div className="d-flex align-items-center">
+                            <span className="svg-icon-sm svg-text">
+                              <PlusIcon />
+                            </span>
+                            <span className="text-black fa-sm">{showAdd ? 'Save' : 'New'}</span>
+                          </div>
                         }
                         backgroundColor={grey(200)}
                       />
-                    </div> */}
+                    </div>
                   </div>
                 </div>,
                 document.querySelector('#popper-portal')

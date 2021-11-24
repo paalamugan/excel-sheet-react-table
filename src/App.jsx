@@ -11,7 +11,7 @@ import Table from './components/Table';
 import DragDrop from './components/DragDrop';
 import { makeRecords } from './helper/utils';
 import { tableReducer } from './reducers/index';
-import { APP_NAME, FILTER_BY_COLUMN, FILTER_OPTIONS } from './config';
+import { APP_NAME, FILTER_OPTIONS } from './config';
 import { ActionTypes, RecordType } from './contants';
 import Multiselect from 'multiselect-react-dropdown';
 import { defaultTableState } from './reducers/tableReducer';
@@ -138,7 +138,7 @@ const App = () => {
                         <Multiselect
                           options={options}
                           avoidHighlightFirstOption={true}
-                          placeholder={`Filter By ${FILTER_BY_COLUMN}`}
+                          placeholder={`Filters`}
                           onSelect={onChangeFilterOption}
                           onRemove={onChangeFilterOption}
                           displayValue="name"

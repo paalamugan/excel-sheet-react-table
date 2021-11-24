@@ -48,7 +48,7 @@ export default function Header({
   const [typePopperElement, setTypePopperElement] = useState(null);
   const typePopper = usePopper(typeReferenceElement, typePopperElement, {
     placement: 'right',
-    strategy: 'fixed',
+    strategy: 'absolute',
   });
   const [showType, setShowType] = useState(false);
 
@@ -58,13 +58,13 @@ export default function Header({
   const [typeCalcReferenceElement, setTypeCalcReferenceElement] = useState(null);
   const [typeCalcPopperElement, setTypeCalcPopperElement] = useState(null);
   const typeCalcPopper = usePopper(typeCalcReferenceElement, typeCalcPopperElement, {
-    placement: 'auto',
+    placement: 'right',
     strategy: 'absolute',
     modifiers: [
       {
         name: 'offset',
         options: {
-          offset: [-34, 0],
+          offset: [0, 0],
         },
       },
     ],
@@ -149,19 +149,19 @@ export default function Header({
   ];
 
   const types = [
-    // {
-    //   onClick: (e) => {
-    //     dataDispatch({
-    //       type: ActionTypes.UPDATE_COLUMN_TYPE,
-    //       columnId: id,
-    //       dataType: DataTypes.SELECT,
-    //     });
-    //     setShowType(false);
-    //     setExpanded(false);
-    //   },
-    //   icon: <MultiIcon />,
-    //   label: 'Select',
-    // },
+    {
+      onClick: (e) => {
+        dataDispatch({
+          type: ActionTypes.UPDATE_COLUMN_TYPE,
+          columnId: id,
+          dataType: DataTypes.SELECT,
+        });
+        setShowType(false);
+        setExpanded(false);
+      },
+      icon: <MultiIcon />,
+      label: 'Select',
+    },
     {
       onClick: (e) => {},
       icon: <FontAwesomeIcon icon="calculator" size="lg" />,
@@ -357,6 +357,7 @@ export default function Header({
                         width: 200,
                         backgroundColor: 'white',
                         zIndex: 4,
+                        top: '5rem',
                       }}
                     >
                       {types.map((type, index) => (
