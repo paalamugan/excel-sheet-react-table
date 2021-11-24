@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import ContentEditable from 'react-contenteditable';
 import { createPortal } from 'react-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { isFinite, debounce } from 'lodash-es';
+import { isFinite } from 'lodash-es';
 
 import Badge from './Badge';
 import { usePopper } from 'react-popper';
@@ -147,7 +147,7 @@ export default function Cell({
               {DataTypes.TEXT !== dataType && DataTypes.SELECT !== dataType ? (
                 <div className="d-flex justify-content-between align-items-center">
                   <div>{isAverageColumn(id) ? 'Avg' : 'Sum'}</div>
-                  <div>
+                  <div className="ms-2 text-ellipsis text-align-right">
                     {CURRENCY}
                     {value.value || 0}
                   </div>
@@ -180,7 +180,7 @@ export default function Cell({
         return (
           <ContentEditable
             html={(value.value && value.value.toString()) || ''}
-            onChange={debounce((e) => onChange(e, dataType), 500)}
+            onChange={(e) => onChange(e, dataType)}
             className="data-input text-align-right"
           />
         );
