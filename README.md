@@ -36,9 +36,5 @@ npm run dev
 - For production,
 
 ```bash
-npm run build
-```
-
-```bash
 npm run deploy
 ```
