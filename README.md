@@ -36,5 +36,15 @@ npm run dev
 - For production,
 
 ```bash
+npm run build
+```
+
+```bash
 npm run deploy
+```
+
+- To run locally with production build,
+
+```sh
+npm run serve
 ```
