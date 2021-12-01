@@ -4,7 +4,6 @@ import {
   DISABLED_CELL_COLUMNS,
   DISABLED_HEADER_COLUMNS,
   INDEX_TEXT,
-  INDEX_TEXT_WIDTH,
   DEFAULT_HEADER_COLUMNS,
   SUM_TEXT,
   FILTER_BY_COLUMN_OPTIONS,
@@ -18,6 +17,16 @@ const DISABLED_COLUMN_CELL_NAME = 'cell';
 
 const globalVariableColumns = [];
 
+const lodashTemplateSettings = {
+  evaluate: /\{\{(.+?)\}\}/g,
+  interpolate: /\{\{=(.+?)\}\}/g,
+  escape: /\{\{-(.+?)\}\}/g,
+};
+
+export const lodashTemplate = (string) => {
+  return template(string, lodashTemplateSettings);
+};
+
 export const isAverageColumn = (key) => {
   return (
     AVERAGE_CALCULATED_COLUMNS.findIndex(
@@ -25,6 +34,7 @@ export const isAverageColumn = (key) => {
     ) !== -1
   );
 };
+
 export const shortId = () => {
   return '_' + Math.random().toString(36).substr(2, 9);
 };
@@ -53,54 +63,49 @@ export const recordReCalculation = (columns = [], data = []) => {
 };
 
 export const sumColumnCalculation = (records) => {
-  records = cloneDeep(records);
+  let cloneRecords = cloneDeep(records);
+  cloneRecords = cloneRecords.slice(0, -1); // Get all records except the last record
 
-  return (columns) => {
-    return sumColumnRecord(columns)(records.slice(0, -1));
-  };
+  return (columns) => sumColumnRecord(columns)(cloneRecords);
 };
 
 export const getGlobalColumnValue = (columnLabel, record, firstRecord) => {
   return +(record[columnLabel] || firstRecord[columnLabel]) || 0;
 };
 
-export const calculateExpression = (calc = '', columnObj, data, firstRecord) => {
+export const validateCalcExpression = (calc = '', columnObj, record, firstRecord) => {
   let result = {};
 
   let expression = calc.trim().replace(/([a-zA-Z0-9_]+)/g, (value) => {
-    value = generateColumnId(value);
-    let columnLabel = columnObj[value] || value;
+    let key = generateColumnId(value);
+    let columnLabel = columnObj[key];
 
-    if (!columnLabel) return columnLabel;
-
-    if (globalVariableColumns.includes(value)) {
-      data[columnLabel] = getGlobalColumnValue(columnLabel, record, firstRecord);
-    } else {
-      data[columnLabel] = +data[columnLabel] || 0;
+    if (!columnLabel) {
+      return (+key || 0).toString();
     }
 
-    result[value] = data[columnLabel];
+    if (globalVariableColumns.includes(key)) {
+      record[columnLabel] = getGlobalColumnValue(columnLabel, record, firstRecord);
+    } else {
+      record[columnLabel] = +record[columnLabel] || 0;
+    }
 
-    return value;
+    result[key] = record[columnLabel];
+
+    return key;
   });
 
   return { expression, result };
 };
 
-export const calculate = (expression) => {
+export const calculateRowSum = (expression, result) => {
   try {
-    let compiled = template(expression);
-    return (data) => {
-      try {
-        return +compiled(data);
-      } catch (err) {
-        console.error(err);
-        return 0;
-      }
-    };
+    let compiledTemplate = lodashTemplate(expression);
+    let value = +compiledTemplate(result);
+    return value || 0;
   } catch (err) {
     console.error(err);
-    return () => 0;
+    return 0;
   }
 };
 
@@ -114,9 +119,9 @@ export const getSumRowRecord = (columns) => {
     try {
       let data = { ...record };
 
-      let { expression, result } = calculateExpression(calc, columnObj, data, firstRecord);
+      let { expression, result } = validateCalcExpression(calc, columnObj, data, firstRecord);
 
-      return calculate(expression)(result) || 0;
+      return calculateRowSum(expression, result);
     } catch (err) {
       console.error(err);
       return 0;
@@ -137,7 +142,7 @@ export const sumColumnRecord = (columns) => {
       for (let [key, value] of Object.entries(currentValue)) {
         value = +value;
 
-        if (key !== label && isFinite(value)) {
+        if (key !== label && isFinite(+value)) {
           result[key] = +result[key] || 0;
           result[key] += value || 0;
 
@@ -217,7 +222,7 @@ const getHeaderColumns = (columnHeaders, firstRecord = {}) => {
   if (columns.length) {
     columns.unshift({
       id: INDEX_TEXT,
-      width: INDEX_TEXT_WIDTH || 20,
+      width: 20,
       label: '',
       disableResizing: true,
     });

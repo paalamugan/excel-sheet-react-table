@@ -462,3 +462,39 @@ body {
 .min-height-3rem {
   min-height: 3rem;
 }
+
+.table-sticky {
+  position: relative;
+}
+
+.table-sticky .tr .td:nth-child(1) {
+  position: sticky;
+  left: 0;
+  z-index: 2;
+  background: #fff;
+  box-shadow: 1px 3px 3px rgba(0, 0, 0, 0.2);
+}
+
+.table-sticky .tr .table-head:nth-child(1) {
+  position: sticky;
+  left: 0;
+  z-index: 2;
+  background: #fff;
+  box-shadow: 1px 3px 3px rgba(0, 0, 0, 0.2);
+}
+
+.table-sticky .tr .td:nth-child(2) {
+  position: sticky;
+  left: 3.125rem;
+  z-index: 2;
+  background: #fff;
+  box-shadow: 1px 3px 3px rgba(0, 0, 0, 0.2);
+}
+
+.table-sticky .tr .table-head:nth-child(2) {
+  position: sticky;
+  left: 3.125rem;
+  z-index: 2;
+  background: #fff;
+  box-shadow: 1px 3px 3px rgba(0, 0, 0, 0.2);
+}

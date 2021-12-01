@@ -96,7 +96,10 @@ export default function Table({ columns, data, dispatch: dataDispatch, skipReset
         height: '100%',
       }}
     >
-      <div {...getTableProps()} className={clsx('custom-table', isTableResizing() && 'noselect')}>
+      <div
+        {...getTableProps()}
+        className={clsx('custom-table table-sticky', isTableResizing() && 'noselect')}
+      >
         {headerGroups.map((headerGroup, index) => (
           <div {...headerGroup.getHeaderGroupProps()} className="tr" key={index}>
             {headerGroup.headers.map((column, index) => {

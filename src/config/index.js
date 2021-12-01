@@ -3,7 +3,6 @@ import { DataTypes } from '../contants';
 export const APP_NAME = 'Excel Read & Write';
 
 export const INDEX_TEXT = 'No.';
-export const INDEX_TEXT_WIDTH = 20;
 export const SUM_TEXT = 'Count';
 export const CURRENCY = '$';
 
