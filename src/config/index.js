@@ -69,8 +69,18 @@ export const DEFAULT_HEADER_COLUMNS = [
     disabled: false, // disabled the header column
   },
   {
-    type: DataTypes.SELECT,
+    type: DataTypes.NUMBER,
     name: 'Column 9',
+    disabled: false, // disabled the header column
+  },
+  {
+    type: DataTypes.NUMBER,
+    name: 'Column 10',
+    disabled: false, // disabled the header column
+  },
+  {
+    type: DataTypes.SELECT,
+    name: 'Column 11',
     options: FILTER_BY_COLUMN_OPTIONS,
     disabled: false, // disabled the header column
   },

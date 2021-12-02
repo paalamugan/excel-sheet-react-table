@@ -103,7 +103,11 @@ export default function Table({ columns, data, dispatch: dataDispatch, skipReset
         {headerGroups.map((headerGroup, index) => (
           <div {...headerGroup.getHeaderGroupProps()} className="tr" key={index}>
             {headerGroup.headers.map((column, index) => {
-              return <div key={index}>{column.render('Header')}</div>;
+              return (
+                <div key={index} className="table-head">
+                  {column.render('Header')}
+                </div>
+              );
             })}
           </div>
         ))}
