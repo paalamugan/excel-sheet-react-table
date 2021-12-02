@@ -68,7 +68,7 @@ const App = () => {
       dispatch({ type: ActionTypes.INITIALIZE_DATA, payload });
       toast.success('Successfully Parsed.');
     } catch (err) {
-      // console.error(err);
+      console.error(err);
       toast.error('Please upload a valid xlsx file with data!');
       dispatch({ type: ActionTypes.INITIALIZE_DATA, payload: makeRecords([]) });
     }
@@ -102,7 +102,7 @@ const App = () => {
         {state.data.length ? (
           <Container fluid>
             <Row>
-              <div className="mb-2 d-flex justify-content-between align-items-center min-height-3rem">
+              <div className="flex-wrap mb-2 d-flex justify-content-between align-items-center min-height-3rem">
                 <div>
                   <input
                     ref={inputRef}
@@ -113,19 +113,19 @@ const App = () => {
                     type="file"
                     accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel"
                   />
-                  <Button onClick={handleUpload} variant="success" className="mr-4">
+                  <Button variant="success" className="mb-2 mr-4" onClick={handleUpload}>
                     <FontAwesomeIcon icon="upload" className="mr-2" />
                     Upload New XLSX
                   </Button>
-                  <Button variant="primary" className="mr-4" onClick={downloadFile}>
+                  <Button variant="primary" className="mb-2 mr-4" onClick={downloadFile}>
                     <FontAwesomeIcon icon="download" className="mr-2" />
                     Download XLSX
                   </Button>
-                  <Button variant="outline-success" onClick={addRow} className="mr-4">
+                  <Button variant="outline-success" className="mb-2 mr-4" onClick={addRow}>
                     <FontAwesomeIcon icon="plus" className="mr-2" />
                     Add Row
                   </Button>
-                  <Button variant="outline-primary" onClick={addColumn}>
+                  <Button variant="outline-primary" className="mb-2 mr-4" onClick={addColumn}>
                     <FontAwesomeIcon icon="plus" className="mr-2" />
                     Add Column
                   </Button>

@@ -9,7 +9,7 @@ export const CURRENCY = '$';
 export const EXPORT_SHEET_DEFAULT_FILE_NAME = 'download';
 export const EXPORT_SHEET_DEFAULT_FILE_TYPE = 'xls'; // Available options: xls, csv, xml, txt, json
 
-export const AVERAGE_CALCULATED_COLUMNS = []; // Calculate the average of the columns.
+export const AVERAGE_CALCULATED_COLUMNS = ['Column_8']; // Calculate the average of the columns.
 export const DISABLED_HEADER_COLUMNS = []; // If you want you can disabled your header cell.
 export const DISABLED_CELL_COLUMNS = []; // If you want you can disabled your row cell.
 
@@ -45,7 +45,6 @@ export const DEFAULT_HEADER_COLUMNS = [
     type: DataTypes.CALC,
     name: 'Column4',
     calc: '{{= Column2 + Column3 }}', // You can do any kind arthimetic calculation inside the curly braces.
-    disabled: false, // disabled the header column
   },
   {
     type: DataTypes.NUMBER,
@@ -65,8 +64,7 @@ export const DEFAULT_HEADER_COLUMNS = [
   {
     type: DataTypes.CALC,
     name: 'Column 8',
-    calc: '{{= Column2 * Column_7 }}', // Remember one thing if column name has a space separated value like `Column 5`. you have to use like this `Column_5`
-    disabled: false, // disabled the header column
+    calc: '{{= Column2 + Column_7 }}', // Remember one thing if column name has a space separated value like `Column 5`. you have to use like this `Column_5`
   },
   {
     type: DataTypes.NUMBER,
