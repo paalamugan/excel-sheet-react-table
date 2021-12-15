@@ -43,7 +43,7 @@ export default function DragDrop({ uploadFile }) {
 
   const onDropRejected = useCallback((rejecteFiles) => {
     setLoading(false);
-    toast.error('Only support *.xlsx and *.xls files');
+    toast.error('Only support *.xlsx, *.xls and *.csv files');
   });
 
   const { getRootProps, getInputProps, isDragActive, isDragAccept, isDragReject } = useDropzone({
@@ -51,7 +51,7 @@ export default function DragDrop({ uploadFile }) {
     onDropRejected,
     maxFiles: 1,
     accept:
-      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel',
+      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,text/csv',
   });
 
   const style = useMemo(
@@ -82,7 +82,7 @@ export default function DragDrop({ uploadFile }) {
             ) : (
               <>
                 <p>Drag 'n' drop some files here, or click to select excel files</p>
-                <em>(Only *.xlsx and *.xls files will be accepted)</em>
+                <em>(Only *.xlsx, *.xls and *.csv files will be accepted)</em>
               </>
             )}
           </>

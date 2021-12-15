@@ -48,3 +48,17 @@ npm run deploy
 ```sh
 npm run serve
 ```
+
+## Tips
+
+- Tar file
+
+```sh
+tar -cvzf excel-sheet-react-table.tar.gz --exclude="node_modules" ./excel-sheet-react-table/
+```
+
+- UnTar file
+
+```sh
+tar -xvzf excel-sheet-react-table.tar.gz
+```

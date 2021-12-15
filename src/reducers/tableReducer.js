@@ -334,15 +334,11 @@ export function tableReducer(state, action) {
     case ActionTypes.DOWNLOAD_TO_SHEET: {
       let columns = state.columns.filter((column) => !!column.label);
 
-      let columnLabels = columns.map((column) => column.label);
-
-      let result = [[...columnLabels]];
+      let result = [];
       let lastIndex = state.data.length - 1;
+
       state.data.forEach((record, index) => {
-        let i = index + 1;
-
-        result[i] = result[i] || [];
-
+        let row = {};
         columns.forEach((column, columnIndex) => {
           let text = record[column.label] || '';
 
@@ -359,9 +355,9 @@ export function tableReducer(state, action) {
                 '"';
             }
           }
-
-          result[i].push(text);
+          row[column.label] = text;
         });
+        result.push(row);
       });
 
       downloadToSheet(result);

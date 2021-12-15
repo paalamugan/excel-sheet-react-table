@@ -1,4 +1,4 @@
-import { isFinite, round, cloneDeep, template } from 'lodash-es';
+import { isFinite, round, cloneDeep, template, find } from 'lodash-es';
 import {
   AVERAGE_CALCULATED_COLUMNS,
   DISABLED_CELL_COLUMNS,
@@ -36,7 +36,7 @@ export const isAverageColumn = (key) => {
 };
 
 export const shortId = () => {
-  return '_' + Math.random().toString(36).substr(2, 9);
+  return '_' + Math.random().toString(36).substring(2, 9);
 };
 
 export const randomColor = () => {
@@ -191,7 +191,6 @@ const getHeaderColumns = (columnHeaders, firstRecord = {}) => {
 
   columnHeaders.forEach((header) => {
     let headerName = header.name;
-    let headerId = generateColumnId(headerName);
     let calc = header.calc || '';
     let dataType =
       header.type ||
@@ -203,6 +202,8 @@ const getHeaderColumns = (columnHeaders, firstRecord = {}) => {
 
     let options = header.options || [];
     options = createFilterOptions(options);
+
+    let headerId = generateColumnId(headerName);
 
     let column = {
       id: headerId,
@@ -243,6 +244,14 @@ const generateColumnHeadersFromSheet = (records) => {
   let columnHeaders = Object.keys(firstRecord);
 
   columnHeaders = columnHeaders.map((headerName) => {
+    let foundColumn = find(DEFAULT_HEADER_COLUMNS, (column) => {
+      return headerName === column.name;
+    });
+
+    if (foundColumn) {
+      return foundColumn;
+    }
+
     return {
       name: headerName,
     };
@@ -256,10 +265,21 @@ export function makeRecords(records = [], recordType = RecordType.EXIST_SHEET) {
 
   if (!records.length && recordType === RecordType.EXIST_SHEET) return result;
 
-  let columns =
-    recordType === RecordType.EXIST_SHEET
-      ? generateColumnHeadersFromSheet(records)
-      : generateColumnHeadersFromNewSheet(records);
+  let columns = [];
+
+  if (RecordType.EXIST_SHEET === recordType) {
+    columns = generateColumnHeadersFromSheet(records);
+    let lastRecord = records[records.length - 1];
+    let lastRecordValues = Object.values(lastRecord);
+
+    if (lastRecordValues.includes(SUM_TEXT)) {
+      records.pop(); // Remove last record
+    }
+  } else {
+    columns = generateColumnHeaders();
+    let firstRecord = createDefaultRow(columns);
+    records.push(firstRecord);
+  }
 
   let getCalculateColumns = calculateRowRecord(columns);
   records = records.map(getCalculateColumns);
@@ -273,17 +293,18 @@ export function makeRecords(records = [], recordType = RecordType.EXIST_SHEET) {
   return result;
 }
 
-export const createDefaultRow = (cols = []) => {
+export const createDefaultRow = (cols = [], defaultRecord = {}) => {
   let newColumns = [...cols];
   let result = newColumns.reduce((result, column) => {
     if (!column.label) return result;
 
     result[column.label] =
-      column.dataType === DataTypes.CALC
+      defaultRecord[column.label] ||
+      (column.dataType === DataTypes.CALC
         ? '0'
         : column.dataType === DataTypes.SELECT || column.type === DataTypes.SELECT
         ? FILTER_BY_COLUMN_OPTIONS[0]
-        : '';
+        : '');
     return result;
   }, {});
 
@@ -292,11 +313,35 @@ export const createDefaultRow = (cols = []) => {
   return result;
 };
 
-export function generateColumnHeadersFromNewSheet(records) {
+export function generateColumnHeaders() {
   let cols = [...DEFAULT_HEADER_COLUMNS];
-  cols = getHeaderColumns(cols);
+  return getHeaderColumns(cols);
+}
 
-  records.push(createDefaultRow(cols));
+export function sampleXlsxData() {
+  let columns = generateColumnHeaders();
+  columns = columns.slice(1, columns.length - 1);
 
-  return cols;
+  let defaultRecord = columns.reduce((accumulator, column, index) => {
+    if (column.dataType === DataTypes.NUMBER) {
+      accumulator[column.label] = (index + 1) * 1;
+    } else {
+      accumulator[column.label] = '';
+    }
+    return accumulator;
+  }, {});
+
+  let records = [];
+  for (let i = 0; i < 10; i++) {
+    defaultRecord[columns[0].label] = `Item ${i + 1}`;
+
+    let row = createDefaultRow(columns, defaultRecord);
+    records.push(row);
+  }
+
+  records = makeRecords(records).data;
+
+  records.forEach((record) => delete record.rowId);
+
+  return records;
 }

@@ -5,17 +5,18 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
-import xlsxParser from 'xlsx-parse-json';
 import Table from './components/Table';
 import DragDrop from './components/DragDrop';
 import { Multiselect } from 'multiselect-react-dropdown';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ToastContainer, toast } from 'react-toastify';
-import { makeRecords } from './helper/utils';
+import { makeRecords, sampleXlsxData } from './helper/utils';
 import { tableReducer } from './reducers/index';
 import { APP_NAME } from './config';
 import { ActionTypes, RecordType } from './contants';
 import { defaultTableState } from './reducers/tableReducer';
+import xlsx2json from './lib/xlsx2json';
+import downloadToSheet from './helper/download-to-sheet';
 
 const App = () => {
   const [state, dispatch] = useReducer(tableReducer, defaultTableState());
@@ -53,15 +54,18 @@ const App = () => {
     });
   };
 
+  const downloadSampleFile = () => {
+    const result = sampleXlsxData();
+    downloadToSheet(result);
+  };
+
   const handleUploadFile = () => onUploadFile(inputRef.current?.files?.[0]);
 
   const onUploadFile = useCallback(async (file) => {
     if (!file) return;
 
     try {
-      const result = await xlsxParser.onFileSelection(file);
-      let key = Object.keys(result)[0];
-      let records = result[key];
+      const records = await xlsx2json(file);
 
       let payload = makeRecords(records);
       setShowFilterInput(false);
@@ -111,11 +115,11 @@ const App = () => {
                     name="uploadFile"
                     onChange={handleUploadFile}
                     type="file"
-                    accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel"
+                    accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,text/csv"
                   />
                   <Button variant="success" className="mb-2 mr-4" onClick={handleUpload}>
                     <FontAwesomeIcon icon="upload" className="mr-2" />
-                    Upload New XLSX
+                    Upload XLSX
                   </Button>
                   <Button variant="primary" className="mb-2 mr-4" onClick={downloadFile}>
                     <FontAwesomeIcon icon="download" className="mr-2" />
@@ -172,7 +176,13 @@ const App = () => {
           </Container>
         ) : (
           <Container>
-            <Row className="my-4 d-flex flex-column justify-content-center">
+            <Row className="mb-2 d-flex flex-column justify-content-center">
+              <Col className="mb-2 text-align-right">
+                <Button variant="primary" onClick={downloadSampleFile}>
+                  <FontAwesomeIcon icon="download" className="mr-2" />
+                  Download Sample XLSX
+                </Button>
+              </Col>
               <Col>
                 <DragDrop uploadFile={onUploadFile} />
               </Col>

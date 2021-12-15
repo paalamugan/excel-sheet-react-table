@@ -52,7 +52,7 @@ export const DEFAULT_HEADER_COLUMNS = [
     disabled: false, // disabled the header column
   },
   {
-    type: DataTypes.TEXT,
+    type: DataTypes.NUMBER,
     name: 'Column 6',
     disabled: false, // disabled the header column
   },
@@ -67,18 +67,8 @@ export const DEFAULT_HEADER_COLUMNS = [
     calc: '{{= Column2 + Column_7 }}', // Remember one thing if column name has a space separated value like `Column 5`. you have to use like this `Column_5`
   },
   {
-    type: DataTypes.NUMBER,
-    name: 'Column 9',
-    disabled: false, // disabled the header column
-  },
-  {
-    type: DataTypes.NUMBER,
-    name: 'Column 10',
-    disabled: false, // disabled the header column
-  },
-  {
     type: DataTypes.SELECT,
-    name: 'Column 11',
+    name: 'Column 9',
     options: FILTER_BY_COLUMN_OPTIONS,
     disabled: false, // disabled the header column
   },
